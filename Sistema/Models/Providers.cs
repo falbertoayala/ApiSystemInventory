@@ -26,5 +26,8 @@ namespace Sistema.Models
         [Required]
         [StringLength(50)]
         public string ProviderContact { get; set; }
+
+        public virtual ICollection<Product2> Product2s { get; set; } 
+
     }
 }

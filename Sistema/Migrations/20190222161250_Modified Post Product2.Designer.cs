@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema.Models;
 
 namespace Sistema.Migrations
 {
     [DbContext(typeof(SistemaContext))]
-    partial class SistemaContextModelSnapshot : ModelSnapshot
+    [Migration("20190222161250_Modified Post Product2")]
+    partial class ModifiedPostProduct2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -425,7 +427,7 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("ProvidersId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -448,7 +450,7 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany("Product2s")
+                        .WithMany()
                         .HasForeignKey("ProvidersId")
                         .OnDelete(DeleteBehavior.Cascade);
 

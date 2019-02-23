@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema.Models;
 
 namespace Sistema.Migrations
 {
     [DbContext(typeof(SistemaContext))]
-    partial class SistemaContextModelSnapshot : ModelSnapshot
+    [Migration("20190221235407_Db Products and Maintenance tables")]
+    partial class DbProductsandMaintenancetables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,7 +209,7 @@ namespace Sistema.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<decimal>("ProductCost");
+                    b.Property<int>("ProductCost");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
@@ -230,43 +232,6 @@ namespace Sistema.Migrations
                     b.HasIndex("TypeProductId");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("Sistema.Models.Product2", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ProductBrandId");
-
-                    b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<decimal>("ProductCost");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<int>("ProvidersId");
-
-                    b.Property<int>("StorageId");
-
-                    b.Property<int>("TypeProductId");
-
-                    b.HasKey("ProductId");
-
-                    b.HasIndex("ProductBrandId");
-
-                    b.HasIndex("ProvidersId");
-
-                    b.HasIndex("StorageId");
-
-                    b.HasIndex("TypeProductId");
-
-                    b.ToTable("Product2");
                 });
 
             modelBuilder.Entity("Sistema.Models.ProductBrand", b =>
@@ -425,7 +390,7 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("ProvidersId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -436,29 +401,6 @@ namespace Sistema.Migrations
 
                     b.HasOne("Sistema.Models.TypeProduct", "TypeProduct")
                         .WithMany("Products")
-                        .HasForeignKey("TypeProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Sistema.Models.Product2", b =>
-                {
-                    b.HasOne("Sistema.Models.ProductBrand", "ProductBrand")
-                        .WithMany()
-                        .HasForeignKey("ProductBrandId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany("Product2s")
-                        .HasForeignKey("ProvidersId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Sistema.Models.Storage", "Storage")
-                        .WithMany()
-                        .HasForeignKey("StorageId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Sistema.Models.TypeProduct", "TypeProduct")
-                        .WithMany()
                         .HasForeignKey("TypeProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

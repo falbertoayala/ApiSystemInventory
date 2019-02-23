@@ -11,58 +11,56 @@ namespace Sistema.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProvidersController : ControllerBase
+    public class TypeProductsController : ControllerBase
     {
         private readonly SistemaContext _context;
 
-        public ProvidersController(SistemaContext context)
+        public TypeProductsController(SistemaContext context)
         {
             _context = context;
         }
 
-        // GET: api/Providers
+        // GET: api/TypeProducts
         [HttpGet]
-        public IEnumerable<Providers> GetProviders()
+        public IEnumerable<TypeProduct> GetTypeProduct()
         {
-            return _context.Providers;
+            return _context.TypeProduct;
         }
 
-        // GET: api/Providers/5
+        // GET: api/TypeProducts/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProviders([FromRoute] int id)
+        public async Task<IActionResult> GetTypeProduct([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var providers = await _context.Providers.FindAsync(id);
+            var typeProduct = await _context.TypeProduct.FindAsync(id);
 
-            if (providers == null)
+            if (typeProduct == null)
             {
                 return NotFound();
             }
 
-            return Ok(providers);
+            return Ok(typeProduct);
         }
 
-        // PUT: api/Providers/5
+        // PUT: api/TypeProducts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProviders([FromRoute] int id, [FromBody] Providers providers)
+        public async Task<IActionResult> PutTypeProduct([FromRoute] int id, [FromBody] TypeProduct typeProduct)
         {
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
-                
             }
 
-            if (id != providers.ProvidersId)
+            if (id != typeProduct.TypeProductId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(providers).State = EntityState.Modified;
+            _context.Entry(typeProduct).State = EntityState.Modified;
 
             try
             {
@@ -70,60 +68,58 @@ namespace Sistema.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProvidersExists(id))
+                if (!TypeProductExists(id))
                 {
                     return NotFound();
                 }
                 else
                 {
                     throw;
-                    
-                    
                 }
             }
 
             return NoContent();
         }
 
-        // POST: api/Providers
+        // POST: api/TypeProducts
         [HttpPost]
-        public async Task<IActionResult> PostProviders([FromBody] Providers providers)
+        public async Task<IActionResult> PostTypeProduct([FromBody] TypeProduct typeProduct)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Providers.Add(providers);
+            _context.TypeProduct.Add(typeProduct);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProviders", new { id = providers.ProvidersId }, providers);
+            return CreatedAtAction("GetTypeProduct", new { id = typeProduct.TypeProductId }, typeProduct);
         }
 
-        // DELETE: api/Providers/5
+        // DELETE: api/TypeProducts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProviders([FromRoute] int id)
+        public async Task<IActionResult> DeleteTypeProduct([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var providers = await _context.Providers.FindAsync(id);
-            if (providers == null)
+            var typeProduct = await _context.TypeProduct.FindAsync(id);
+            if (typeProduct == null)
             {
                 return NotFound();
             }
 
-            _context.Providers.Remove(providers);
+            _context.TypeProduct.Remove(typeProduct);
             await _context.SaveChangesAsync();
 
-            return Ok(providers);
+            return Ok(typeProduct);
         }
 
-        private bool ProvidersExists(int id)
+        private bool TypeProductExists(int id)
         {
-            return _context.Providers.Any(e => e.ProvidersId == id);
+            return _context.TypeProduct.Any(e => e.TypeProductId == id);
         }
     }
 }

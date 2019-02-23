@@ -5,64 +5,61 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sistema.Models;
 
-namespace Sistema.Controllers
+namespace Sistema.Models
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProvidersController : ControllerBase
+    public class StoragesController : ControllerBase
     {
         private readonly SistemaContext _context;
 
-        public ProvidersController(SistemaContext context)
+        public StoragesController(SistemaContext context)
         {
             _context = context;
         }
 
-        // GET: api/Providers
+        // GET: api/Storages
         [HttpGet]
-        public IEnumerable<Providers> GetProviders()
+        public IEnumerable<Storage> GetStorage()
         {
-            return _context.Providers;
+            return _context.Storage;
         }
 
-        // GET: api/Providers/5
+        // GET: api/Storages/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProviders([FromRoute] int id)
+        public async Task<IActionResult> GetStorage([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var providers = await _context.Providers.FindAsync(id);
+            var storage = await _context.Storage.FindAsync(id);
 
-            if (providers == null)
+            if (storage == null)
             {
                 return NotFound();
             }
 
-            return Ok(providers);
+            return Ok(storage);
         }
 
-        // PUT: api/Providers/5
+        // PUT: api/Storages/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProviders([FromRoute] int id, [FromBody] Providers providers)
+        public async Task<IActionResult> PutStorage([FromRoute] int id, [FromBody] Storage storage)
         {
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
-                
             }
 
-            if (id != providers.ProvidersId)
+            if (id != storage.StorageId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(providers).State = EntityState.Modified;
+            _context.Entry(storage).State = EntityState.Modified;
 
             try
             {
@@ -70,60 +67,58 @@ namespace Sistema.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProvidersExists(id))
+                if (!StorageExists(id))
                 {
                     return NotFound();
                 }
                 else
                 {
                     throw;
-                    
-                    
                 }
             }
 
             return NoContent();
         }
 
-        // POST: api/Providers
+        // POST: api/Storages
         [HttpPost]
-        public async Task<IActionResult> PostProviders([FromBody] Providers providers)
+        public async Task<IActionResult> PostStorage([FromBody] Storage storage)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Providers.Add(providers);
+            _context.Storage.Add(storage);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProviders", new { id = providers.ProvidersId }, providers);
+            return CreatedAtAction("GetStorage", new { id = storage.StorageId }, storage);
         }
 
-        // DELETE: api/Providers/5
+        // DELETE: api/Storages/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProviders([FromRoute] int id)
+        public async Task<IActionResult> DeleteStorage([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var providers = await _context.Providers.FindAsync(id);
-            if (providers == null)
+            var storage = await _context.Storage.FindAsync(id);
+            if (storage == null)
             {
                 return NotFound();
             }
 
-            _context.Providers.Remove(providers);
+            _context.Storage.Remove(storage);
             await _context.SaveChangesAsync();
 
-            return Ok(providers);
+            return Ok(storage);
         }
 
-        private bool ProvidersExists(int id)
+        private bool StorageExists(int id)
         {
-            return _context.Providers.Any(e => e.ProvidersId == id);
+            return _context.Storage.Any(e => e.StorageId == id);
         }
     }
 }
