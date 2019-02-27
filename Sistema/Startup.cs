@@ -59,6 +59,8 @@ namespace Sistema
 
                 );
 
+            services.AddCors();
+
            
         }
 
@@ -76,6 +78,8 @@ namespace Sistema
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            app.UseCors(b => b.AllowAnyOrigin());
         }
     }
 }
