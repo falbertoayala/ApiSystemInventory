@@ -16,7 +16,7 @@ namespace Sistema.Models
         {
         }
 
-        public DbSet<Sistema.Models.Medico> Medico { get; set; }
+        //public DbSet<Sistema.Models.Medico> Medico { get; set; }
 
         public DbSet<Sistema.Models.Users> Users { get; set; }
 
@@ -28,7 +28,7 @@ namespace Sistema.Models
 
         public DbSet<Sistema.Models.ProductBrand> ProductBrand { get; set; }
 
-        public DbSet<Sistema.Models.Product> Product { get; set; }
+        //public DbSet<Sistema.Models.Product> Product { get; set; }
 
         public DbSet<Sistema.Models.Product2> Product2 { get; set; }
 

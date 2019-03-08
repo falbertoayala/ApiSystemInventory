@@ -24,7 +24,25 @@ namespace Sistema.Controllers
         [HttpGet]
         public IEnumerable<Product2> GetProduct2()
         {
-            return _context.Product2;
+            var query = _context.Product2
+                .Include(b => b.ProductBrand)
+                .Include(p => p.Providers)
+                .Include(e => e.Storage)
+                .Include(t => t.TypeProduct)
+                .Select(s => new Product2()
+                {
+                    ProductId = s.ProductId,
+                    ProductCode = s.ProductCode,
+                    ProductName = s.ProductName,
+                    ProductCost = s.ProductCost,
+                    ProductBrand = s.ProductBrand,
+                    Providers = s.Providers,
+                    Storage = s.Storage,
+                    TypeProduct = s.TypeProduct
+                });
+
+
+            return query.ToList();
         }
 
         // GET: api/Product2/5
