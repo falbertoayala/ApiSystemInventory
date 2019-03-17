@@ -20,14 +20,26 @@ namespace Sistema.Models
         [StringLength(8)]
         public string ProviderPhone1 { get; set; }
         public string ProviderPhone2 { get; set; }
+        public string ProviderAddress { get; set; }
+
+      
+
+
+
+
         [Required]
         [StringLength(100)]
         public string ProviderEmail { get; set; }
         [Required]
         [StringLength(50)]
         public string ProviderContact { get; set; }
+        [StringLength(50)]
+        public string ContactPosition { get; set; }
 
-        public virtual ICollection<Product2> Product2s { get; set; } 
+      
+       
+        public virtual ICollection<Product> Products { get; set; } 
+       
 
     }
 }

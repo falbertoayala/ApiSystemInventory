@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema.Models;
 
 namespace Sistema.Migrations
 {
     [DbContext(typeof(SistemaContext))]
-    partial class SistemaContextModelSnapshot : ModelSnapshot
+    [Migration("20190313013737_UpdateFieldToRequisitionStatusModel")]
+    partial class UpdateFieldToRequisitionStatusModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,19 +182,6 @@ namespace Sistema.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Sistema.Models.City", b =>
-                {
-                    b.Property<int>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CityName");
-
-                    b.HasKey("CityId");
-
-                    b.ToTable("City");
-                });
-
             modelBuilder.Entity("Sistema.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -253,9 +242,6 @@ namespace Sistema.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContactPosition")
-                        .HasMaxLength(50);
-
                     b.Property<string>("ProviderAddress");
 
                     b.Property<string>("ProviderContact")
@@ -285,26 +271,9 @@ namespace Sistema.Migrations
                     b.ToTable("Providers");
                 });
 
-            modelBuilder.Entity("Sistema.Models.Purchase", b =>
+            modelBuilder.Entity("Sistema.Models.PruchaseDetail", b =>
                 {
-                    b.Property<int>("PurchaseId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ProvidersId");
-
-                    b.Property<DateTime>("PurchaseDate");
-
-                    b.HasKey("PurchaseId");
-
-                    b.HasIndex("ProvidersId");
-
-                    b.ToTable("Purchase");
-                });
-
-            modelBuilder.Entity("Sistema.Models.PurchaseDetail", b =>
-                {
-                    b.Property<int>("PurchaseDetailId")
+                    b.Property<int>("PuchaseDetailId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -314,13 +283,32 @@ namespace Sistema.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.HasKey("PurchaseDetailId");
+                    b.HasKey("PuchaseDetailId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("PurchaseId");
 
                     b.ToTable("PruchaseDetail");
+                });
+
+            modelBuilder.Entity("Sistema.Models.Purchase", b =>
+                {
+                    b.Property<int>("PurchaseId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ProvidersId");
+
+                    b.Property<int>("PuchaseDetailId");
+
+                    b.Property<DateTime>("PurchaseDate");
+
+                    b.HasKey("PurchaseId");
+
+                    b.HasIndex("ProvidersId");
+
+                    b.ToTable("Purchase");
                 });
 
             modelBuilder.Entity("Sistema.Models.Requisition", b =>
@@ -333,27 +321,23 @@ namespace Sistema.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("ClassHour");
-
                     b.Property<DateTime>("PracticeDate");
 
                     b.Property<string>("ReqPracticeName")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int?>("RequisitionDetailId");
+                    b.Property<int>("RequisitionDetailId");
 
-                    b.Property<int?>("RequisitionStatusId");
+                    b.Property<int>("RequisitionStatusId");
 
                     b.Property<DateTime>("RequistionDate");
 
-                    b.Property<string>("Section")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("StatusRequisitionDate");
-
                     b.Property<int?>("StorageId");
+
+                    b.Property<string>("TeacherAccount")
+                        .IsRequired()
+                        .HasMaxLength(9);
 
                     b.HasKey("RequisitionId");
 
@@ -369,8 +353,6 @@ namespace Sistema.Migrations
                     b.Property<int>("RequisitionDetailId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Observation");
 
                     b.Property<int?>("ProductId");
 
@@ -510,7 +492,7 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany("Products")
+                        .WithMany("Product2s")
                         .HasForeignKey("ProvidersId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -525,6 +507,18 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Sistema.Models.PruchaseDetail", b =>
+                {
+                    b.HasOne("Sistema.Models.Product", "Product2")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("Sistema.Models.Purchase", "Purchase")
+                        .WithMany("PruchaseDetails")
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Sistema.Models.Purchase", b =>
                 {
                     b.HasOne("Sistema.Models.Providers", "Providers")
@@ -533,23 +527,12 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Sistema.Models.PurchaseDetail", b =>
-                {
-                    b.HasOne("Sistema.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Sistema.Models.Purchase", "Purchase")
-                        .WithMany("PurchaseDetails")
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Sistema.Models.Requisition", b =>
                 {
                     b.HasOne("Sistema.Models.RequisitionStatus", "RequisitionStatus")
                         .WithMany("Requisitions")
-                        .HasForeignKey("RequisitionStatusId");
+                        .HasForeignKey("RequisitionStatusId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Storage", "Storage")
                         .WithMany()

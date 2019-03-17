@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema.Models;
 
 namespace Sistema.Migrations
 {
     [DbContext(typeof(SistemaContext))]
-    partial class SistemaContextModelSnapshot : ModelSnapshot
+    [Migration("20190316075935_UpdateControllerServices")]
+    partial class UpdateControllerServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,19 +182,6 @@ namespace Sistema.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Sistema.Models.City", b =>
-                {
-                    b.Property<int>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CityName");
-
-                    b.HasKey("CityId");
-
-                    b.ToTable("City");
-                });
-
             modelBuilder.Entity("Sistema.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -252,9 +241,6 @@ namespace Sistema.Migrations
                     b.Property<int>("ProvidersId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ContactPosition")
-                        .HasMaxLength(50);
 
                     b.Property<string>("ProviderAddress");
 
@@ -369,8 +355,6 @@ namespace Sistema.Migrations
                     b.Property<int>("RequisitionDetailId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Observation");
 
                     b.Property<int?>("ProductId");
 
@@ -510,7 +494,7 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany("Products")
+                        .WithMany("Product2s")
                         .HasForeignKey("ProvidersId")
                         .OnDelete(DeleteBehavior.Cascade);
 

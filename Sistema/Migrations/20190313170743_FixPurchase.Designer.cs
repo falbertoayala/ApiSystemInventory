@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema.Models;
 
 namespace Sistema.Migrations
 {
     [DbContext(typeof(SistemaContext))]
-    partial class SistemaContextModelSnapshot : ModelSnapshot
+    [Migration("20190313170743_FixPurchase")]
+    partial class FixPurchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,19 +182,6 @@ namespace Sistema.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Sistema.Models.City", b =>
-                {
-                    b.Property<int>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CityName");
-
-                    b.HasKey("CityId");
-
-                    b.ToTable("City");
-                });
-
             modelBuilder.Entity("Sistema.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -253,9 +242,6 @@ namespace Sistema.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContactPosition")
-                        .HasMaxLength(50);
-
                     b.Property<string>("ProviderAddress");
 
                     b.Property<string>("ProviderContact")
@@ -295,6 +281,8 @@ namespace Sistema.Migrations
 
                     b.Property<DateTime>("PurchaseDate");
 
+                    b.Property<int>("PurchaseDetailId");
+
                     b.HasKey("PurchaseId");
 
                     b.HasIndex("ProvidersId");
@@ -333,8 +321,6 @@ namespace Sistema.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("ClassHour");
-
                     b.Property<DateTime>("PracticeDate");
 
                     b.Property<string>("ReqPracticeName")
@@ -347,13 +333,11 @@ namespace Sistema.Migrations
 
                     b.Property<DateTime>("RequistionDate");
 
-                    b.Property<string>("Section")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("StatusRequisitionDate");
-
                     b.Property<int?>("StorageId");
+
+                    b.Property<string>("TeacherAccount")
+                        .IsRequired()
+                        .HasMaxLength(9);
 
                     b.HasKey("RequisitionId");
 
@@ -369,8 +353,6 @@ namespace Sistema.Migrations
                     b.Property<int>("RequisitionDetailId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Observation");
 
                     b.Property<int?>("ProductId");
 
@@ -510,7 +492,7 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Sistema.Models.Providers", "Providers")
-                        .WithMany("Products")
+                        .WithMany("Product2s")
                         .HasForeignKey("ProvidersId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -535,7 +517,7 @@ namespace Sistema.Migrations
 
             modelBuilder.Entity("Sistema.Models.PurchaseDetail", b =>
                 {
-                    b.HasOne("Sistema.Models.Product", "Product")
+                    b.HasOne("Sistema.Models.Product", "Product2")
                         .WithMany()
                         .HasForeignKey("ProductId");
 

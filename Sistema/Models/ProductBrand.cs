@@ -14,7 +14,7 @@ namespace Sistema.Models
         [StringLength(100)]
         public string ProductBrandName { get; set; }
 
-        public virtual ICollection<Product2> Product2s { get; set; }
+        public virtual ICollection<Product> Product2s { get; set; }
 
     }
 }
