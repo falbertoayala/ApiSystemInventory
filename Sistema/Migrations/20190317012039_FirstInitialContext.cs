@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sistema.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class FirstInitialContext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,6 +48,19 @@ namespace Sistema.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "City",
+                columns: table => new
+                {
+                    CityId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CityName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_City", x => x.CityId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductBrand",
                 columns: table => new
                 {
@@ -72,7 +85,8 @@ namespace Sistema.Migrations
                     ProviderPhone2 = table.Column<string>(nullable: true),
                     ProviderAddress = table.Column<string>(nullable: true),
                     ProviderEmail = table.Column<string>(maxLength: 100, nullable: false),
-                    ProviderContact = table.Column<string>(maxLength: 50, nullable: false)
+                    ProviderContact = table.Column<string>(maxLength: 50, nullable: false),
+                    ContactPosition = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,7 +99,7 @@ namespace Sistema.Migrations
                 {
                     RequisitionStatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RequisitionDetail = table.Column<string>(maxLength: 15, nullable: false)
+                    Name = table.Column<string>(maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,8 +263,7 @@ namespace Sistema.Migrations
                     PurchaseId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PurchaseDate = table.Column<DateTime>(nullable: false),
-                    ProvidersId = table.Column<int>(nullable: false),
-                    PuchaseDetailId = table.Column<int>(nullable: false)
+                    ProvidersId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -270,13 +283,15 @@ namespace Sistema.Migrations
                     RequisitionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RequistionDate = table.Column<DateTime>(nullable: false),
-                    TeacherAccount = table.Column<string>(maxLength: 9, nullable: false),
                     Class = table.Column<string>(maxLength: 50, nullable: false),
                     ReqPracticeName = table.Column<string>(maxLength: 50, nullable: false),
+                    Section = table.Column<string>(maxLength: 50, nullable: false),
+                    ClassHour = table.Column<DateTime>(nullable: false),
                     PracticeDate = table.Column<DateTime>(nullable: false),
+                    StatusRequisitionDate = table.Column<string>(nullable: true),
                     StorageId = table.Column<int>(nullable: true),
-                    RequisitionDetailId = table.Column<int>(nullable: false),
-                    RequisitionStatusId = table.Column<int>(nullable: false)
+                    RequisitionDetailId = table.Column<int>(nullable: true),
+                    RequisitionStatusId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -286,7 +301,7 @@ namespace Sistema.Migrations
                         column: x => x.RequisitionStatusId,
                         principalTable: "RequisitionStatus",
                         principalColumn: "RequisitionStatusId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Requisition_Storage_StorageId",
                         column: x => x.StorageId,
@@ -343,7 +358,7 @@ namespace Sistema.Migrations
                 name: "PruchaseDetail",
                 columns: table => new
                 {
-                    PuchaseDetailId = table.Column<int>(nullable: false)
+                    PurchaseDetailId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PurchaseId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: true),
@@ -351,7 +366,7 @@ namespace Sistema.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PruchaseDetail", x => x.PuchaseDetailId);
+                    table.PrimaryKey("PK_PruchaseDetail", x => x.PurchaseDetailId);
                     table.ForeignKey(
                         name: "FK_PruchaseDetail_Product_ProductId",
                         column: x => x.ProductId,
@@ -372,9 +387,10 @@ namespace Sistema.Migrations
                 {
                     RequisitionDetailId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RequisitionId = table.Column<int>(nullable: false),
+                    RequisitionId = table.Column<int>(nullable: true),
                     ProductId = table.Column<int>(nullable: true),
-                    Quantity = table.Column<int>(nullable: false)
+                    Quantity = table.Column<int>(nullable: false),
+                    Observation = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -390,7 +406,7 @@ namespace Sistema.Migrations
                         column: x => x.RequisitionId,
                         principalTable: "Requisition",
                         principalColumn: "RequisitionId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -504,6 +520,9 @@ namespace Sistema.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "City");
 
             migrationBuilder.DropTable(
                 name: "PruchaseDetail");

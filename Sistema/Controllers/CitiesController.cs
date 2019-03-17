@@ -23,6 +23,7 @@ namespace Sistema.Controllers
         // GET: api/Cities
         [HttpGet]
         public IEnumerable<City> GetCity()
+
         {
             return _context.City;
         }

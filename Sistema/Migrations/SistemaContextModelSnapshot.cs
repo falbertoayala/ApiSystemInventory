@@ -186,9 +186,13 @@ namespace Sistema.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CityId1");
+
                     b.Property<string>("CityName");
 
                     b.HasKey("CityId");
+
+                    b.HasIndex("CityId1");
 
                     b.ToTable("City");
                 });
@@ -253,6 +257,8 @@ namespace Sistema.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CityId");
+
                     b.Property<string>("ContactPosition")
                         .HasMaxLength(50);
 
@@ -281,6 +287,8 @@ namespace Sistema.Migrations
                         .HasMaxLength(14);
 
                     b.HasKey("ProvidersId");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("Providers");
                 });
@@ -502,6 +510,13 @@ namespace Sistema.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Sistema.Models.City", b =>
+                {
+                    b.HasOne("Sistema.Models.City")
+                        .WithMany("Cities")
+                        .HasForeignKey("CityId1");
+                });
+
             modelBuilder.Entity("Sistema.Models.Product", b =>
                 {
                     b.HasOne("Sistema.Models.ProductBrand", "ProductBrand")
@@ -522,6 +537,14 @@ namespace Sistema.Migrations
                     b.HasOne("Sistema.Models.TypeProduct", "TypeProduct")
                         .WithMany("Product2s")
                         .HasForeignKey("TypeProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Sistema.Models.Providers", b =>
+                {
+                    b.HasOne("Sistema.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

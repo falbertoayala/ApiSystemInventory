@@ -9,9 +9,10 @@ namespace Sistema.Models
     public class City
     {
         [Key]
-
         public Int32 CityId { get; set; }
         public string CityName { get; set; }
 
+
+        public virtual ICollection<City>Cities { get; set; }
     }
 }

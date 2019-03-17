@@ -22,7 +22,7 @@ namespace Sistema.Models
         public string ProviderPhone2 { get; set; }
         public string ProviderAddress { get; set; }
 
-      
+        public Int32 CityId { get; set; }
 
 
 
@@ -37,7 +37,7 @@ namespace Sistema.Models
         public string ContactPosition { get; set; }
 
       
-       
+       public virtual City City { get; set; }
         public virtual ICollection<Product> Products { get; set; } 
        
 
