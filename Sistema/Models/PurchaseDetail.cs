@@ -14,7 +14,11 @@ namespace Sistema.Models
         public Int32 PurchaseId { get; set; }
         public Int32? ProductId { get; set; }
 
+        [Required]
         public Int32 Quantity { get; set; }
+        [Required]
+        public Decimal UnitCost { get; set; }
+        public Decimal TotalCost { get; set; }
 
         public virtual Purchase Purchase { get; set; }
         public virtual Product Product { get; set; }
