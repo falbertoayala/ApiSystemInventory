@@ -34,7 +34,7 @@ namespace Sistema.Controllers
                     s.ReqPracticeName,
                     s.ClassHour,
                     s.PracticeDate,
-                    s.RequisitionStatus.Name,
+                    status= s.RequisitionStatus.Name,
                     s.RequistionDate,
                     s.StatusRequisitionDate,
                     s.StorageId,
@@ -99,6 +99,60 @@ namespace Sistema.Controllers
             return NoContent();
         }
 
+        // PUT: api/Requisitions/5
+
+        [HttpPut("{id}")]
+        [Route("Accept/{id}")]
+        public async Task<IActionResult> Accept([FromRoute] int id)
+        {
+
+            var status = _context.RequisitionStatus.Where(w => w.Name.Contains("Aprobado")).FirstOrDefault();
+
+            if (status == null)
+            {
+                return BadRequest(new { status = "Error", Message = "No hay estado en proceso creado" });
+            }
+
+            var request = _context.Requisition.Find(id);
+
+            if (request.RequisitionStatus.Name.Contains("En Proceso"))
+            {
+
+                request.RequisitionStatus = status;
+
+                String message = "";
+
+                foreach (var r in request.RequisitionDetails)
+                {
+                    var product = _context.Product.Find(r.ProductId);
+                    if (!product.MakeRequest(r.Quantity))
+                    {
+                        message += "No hay cantidad suficiente en producto " + product.ProductName;
+                    }
+                }
+
+                if (message.Length > 0)
+                {
+                    return BadRequest(new { status = "Error", Message = message });
+                }
+
+                _context.Entry(request).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+
+                    return Ok(new { status = "Ok" });
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { status = "Error", Message = e.Message, InnerExption = e.InnerException.Message });
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Requisitions
         [HttpPost]
         public async Task<IActionResult> PostRequisition([FromBody] Requisition requisition)
@@ -108,24 +162,16 @@ namespace Sistema.Controllers
                 return BadRequest(ModelState);
             }
 
-            try { 
+            try {
+                var status = _context.RequisitionStatus.Where(s => s.Name.Contains("En Proceso")).FirstOrDefault();
+
+                if(status == null)
+                {
+                    return BadRequest(new { status = "Error", Message ="No hay estado en proceso"});
+                }
+
+                requisition.RequisitionStatus = status;
                 _context.Requisition.Add(requisition);
-
-                String message = "";
-
-                foreach (var r in requisition.RequisitionDetails)
-                {
-                    var product = _context.Product.Find(r.ProductId);
-                    if (!product.MakeRequest(r.Quantity))
-                    {
-                        message += "No hay cantidad suficiente en producto " + product.ProductName;
-                    }
-                }
-
-                if(message.Length > 0)
-                {
-                    return BadRequest(new { status = "Error", Message = message });
-                }
 
                 await _context.SaveChangesAsync();
             }

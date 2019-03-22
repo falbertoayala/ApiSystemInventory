@@ -24,8 +24,11 @@ namespace Sistema.Controllers
         [HttpGet]
         public IEnumerable<Object> GetPurchase()
         {
-            var result = _context
-                .Purchase
+            var result = _context.Purchase
+                .Include(p => p.ProvidersId)
+                .Include(d => d.PurchaseDate)
+                .Include(t => t.PurchaseDetails)
+                
                 .Select(s => new
                 {
                     s.PurchaseId,

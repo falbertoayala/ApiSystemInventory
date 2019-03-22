@@ -24,8 +24,43 @@ namespace Sistema.Controllers
         [HttpGet]
         public IEnumerable<Providers> GetProviders()
         {
+            var query = _context.Providers
+                .Include(n => n.ProviderName)
+                .Include(r => r.ProviderRtn)
+                .Include(p1 => p1.ProviderPhone1)
+                .Include(p2 => p2.ProviderPhone2)
+                .Include(a => a.ProviderAddress)
+                .Include(c => c.City)
+                .Include(e => e.ProviderEmail)
+                .Include(co => co.ProviderContact)
+                .Include(cp => cp.ContactPosition)
+                .Select(s => new Providers()
+                {
+                    ProvidersId = s.ProvidersId,
+                    ProviderName = s.ProviderName,
+                    ProviderRtn = s.ProviderRtn,
+                    ProviderPhone1 = s.ProviderPhone1,
+                    ProviderPhone2 = s.ProviderPhone2,
+                    ProviderAddress = s.ProviderAddress,
+                    City = s.City,
+                    ProviderEmail = s.ProviderEmail,
+                    ProviderContact =s.ProviderContact,
+                    ContactPosition = s.ContactPosition
+
+                });
+
+            return query.ToList();
+                                                  
+         }
+
+
+        // GET: api/Providers
+       /* [HttpGet]
+        public IEnumerable<Providers> GetProviders()
+        {
             return _context.Providers;
-        }
+        }*/
+        
 
         // GET: api/Providers/5
         [HttpGet("{id}")]
